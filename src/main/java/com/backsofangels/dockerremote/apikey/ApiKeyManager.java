@@ -10,6 +10,7 @@ import java.util.Random;
 @Service
 public class ApiKeyManager {
     private static ApiKeyManager managerInstance = null;
+    private SecretFileManager secretFileManager;
     private String apiKey;
 
     private Logger logger = LoggerFactory.getLogger("ApiKeyManager");
@@ -42,5 +43,17 @@ public class ApiKeyManager {
 
     public boolean validateApiKey(String key) {
         return key.equals(apiKey);
+    }
+
+    public boolean persistApiKey() {
+        secretFileManager = new SecretFileManager();
+
+        if (!secretFileManager.checkIfApiKeyExists()) {
+            secretFileManager.createApiKeyFile();
+        }
+
+        String apiKeyProperty = generateApiKey();
+
+        return secretFileManager.persistApiKeyOnFile(apiKeyProperty);
     }
 }
