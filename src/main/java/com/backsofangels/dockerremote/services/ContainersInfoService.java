@@ -29,22 +29,12 @@ public class ContainersInfoService {
     public List<Container> getRunningContainers(boolean allContainers) throws URISyntaxException, IOException {
         URI uri;
 
-        if (allContainers) {
-            uri = new URIBuilder()
-                    .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
-                    .setHost(LocalhostConfiguration.LOCALHOST_HOST)
-                    .setPort(LocalhostConfiguration.LOCALHOST_PORT)
-                    .setPath(Endpoints.CONTAINER_LIST)
-                    .addParameter("all", "true")
-                    .build();
-        } else {
             uri = new URIBuilder()
                     .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
                     .setHost(LocalhostConfiguration.LOCALHOST_HOST)
                     .setPort(LocalhostConfiguration.LOCALHOST_PORT)
                     .setPath(Endpoints.CONTAINER_LIST)
                     .build();
-        }
 
         HttpGet get = new HttpGet(uri);
         get.addHeader("Accept", "application/json");
@@ -63,5 +53,30 @@ public class ContainersInfoService {
         }
     }
 
-    
+    public List<Container> getAllContainers() throws URISyntaxException, IOException {
+        URI uri;
+        uri = new URIBuilder()
+                .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
+                .setHost(LocalhostConfiguration.LOCALHOST_HOST)
+                .setPort(LocalhostConfiguration.LOCALHOST_PORT)
+                .setPath(Endpoints.CONTAINER_LIST)
+                .addParameter("all", "true")
+                .build();
+
+        HttpGet get = new HttpGet(uri);
+        get.addHeader("Accept", "application/json");
+        CloseableHttpResponse response = client.execute(get);
+
+        try {
+            HttpEntity entity = response.getEntity();
+            ObjectMapper mapper = new ObjectMapper();
+            List<Container> containers = mapper.readValue(entity.getContent(), mapper.getTypeFactory().constructCollectionType(ArrayList.class, Container.class));
+            return containers;
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            return null;
+        } finally {
+            response.close();
+        }
+    }
 }
