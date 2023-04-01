@@ -1,7 +1,6 @@
 package com.backsofangels.dockerremote.model;
 
 import com.backsofangels.dockerremote.deserializers.PortsDeserializer;
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
