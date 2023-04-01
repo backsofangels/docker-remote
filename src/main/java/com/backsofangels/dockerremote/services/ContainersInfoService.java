@@ -1,5 +1,7 @@
 package com.backsofangels.dockerremote.services;
 
+import com.backsofangels.dockerremote.constants.Endpoints;
+import com.backsofangels.dockerremote.constants.LocalhostConfiguration;
 import com.backsofangels.dockerremote.model.Container;
 import com.backsofangels.dockerremote.utils.NetworkClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,18 +31,18 @@ public class ContainersInfoService {
 
         if (allContainers) {
             uri = new URIBuilder()
-                    .setScheme("http")
-                    .setHost("localhost")
-                    .setPort(3001)
-                    .setPath("/v1.42/containers/json")
+                    .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
+                    .setHost(LocalhostConfiguration.LOCALHOST_HOST)
+                    .setPort(LocalhostConfiguration.LOCALHOST_PORT)
+                    .setPath(Endpoints.CONTAINER_LIST)
                     .addParameter("all", "true")
                     .build();
         } else {
             uri = new URIBuilder()
-                    .setScheme("http")
-                    .setHost("localhost")
-                    .setPort(3001)
-                    .setPath("/v1.42/containers/json")
+                    .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
+                    .setHost(LocalhostConfiguration.LOCALHOST_HOST)
+                    .setPort(LocalhostConfiguration.LOCALHOST_PORT)
+                    .setPath(Endpoints.CONTAINER_LIST)
                     .build();
         }
 
@@ -60,4 +62,6 @@ public class ContainersInfoService {
             response.close();
         }
     }
+
+    
 }
