@@ -26,25 +26,37 @@ public class ContainersInfoService {
     private Logger logger = LoggerFactory.getLogger(ContainersInfoService.class);
     private CloseableHttpClient client = NetworkClient.getNetworkClient().getClient();
 
-    public List<Container> getRunningContainers(boolean allContainers) throws URISyntaxException, IOException {
+    public List<Container> getRunningContainers() throws IOException {
         URI uri;
 
+        try {
             uri = new URIBuilder()
                     .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
                     .setHost(LocalhostConfiguration.LOCALHOST_HOST)
                     .setPort(LocalhostConfiguration.LOCALHOST_PORT)
                     .setPath(Endpoints.CONTAINER_LIST)
                     .build();
+        } catch (URISyntaxException exception) {
+            return null;
+        }
 
         HttpGet get = new HttpGet(uri);
         get.addHeader("Accept", "application/json");
-        CloseableHttpResponse response = client.execute(get);
+
+
+        CloseableHttpResponse response = null;
 
         try {
+            response = null;
+            response = client.execute(get);
+
             HttpEntity entity = response.getEntity();
             ObjectMapper mapper = new ObjectMapper();
-            List<Container> containers = mapper.readValue(entity.getContent(), mapper.getTypeFactory().constructCollectionType(ArrayList.class, Container.class));
-            return containers;
+
+            return mapper
+                    .readValue(entity.getContent(), mapper
+                            .getTypeFactory()
+                            .constructCollectionType(ArrayList.class, Container.class));
         } catch (IOException exception) {
             exception.printStackTrace();
             return null;
@@ -53,25 +65,38 @@ public class ContainersInfoService {
         }
     }
 
-    public List<Container> getAllContainers() throws URISyntaxException, IOException {
+    public List<Container> getAllContainers() throws IOException {
         URI uri;
-        uri = new URIBuilder()
-                .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
-                .setHost(LocalhostConfiguration.LOCALHOST_HOST)
-                .setPort(LocalhostConfiguration.LOCALHOST_PORT)
-                .setPath(Endpoints.CONTAINER_LIST)
-                .addParameter("all", "true")
-                .build();
+
+        try {
+            uri = new URIBuilder()
+                    .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
+                    .setHost(LocalhostConfiguration.LOCALHOST_HOST)
+                    .setPort(LocalhostConfiguration.LOCALHOST_PORT)
+                    .setPath(Endpoints.CONTAINER_LIST)
+                    .addParameter("all", "true")
+                    .build();
+        } catch (URISyntaxException exception) {
+            return null;
+        }
 
         HttpGet get = new HttpGet(uri);
         get.addHeader("Accept", "application/json");
-        CloseableHttpResponse response = client.execute(get);
+
+
+        CloseableHttpResponse response = null;
 
         try {
+            response = null;
+            response = client.execute(get);
+
             HttpEntity entity = response.getEntity();
             ObjectMapper mapper = new ObjectMapper();
-            List<Container> containers = mapper.readValue(entity.getContent(), mapper.getTypeFactory().constructCollectionType(ArrayList.class, Container.class));
-            return containers;
+
+            return mapper
+                    .readValue(entity.getContent(), mapper
+                            .getTypeFactory()
+                            .constructCollectionType(ArrayList.class, Container.class));
         } catch (IOException exception) {
             exception.printStackTrace();
             return null;
