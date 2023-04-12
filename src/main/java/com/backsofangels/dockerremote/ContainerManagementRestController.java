@@ -1,18 +1,13 @@
 package com.backsofangels.dockerremote;
 
 import com.backsofangels.dockerremote.services.ContainersManagementService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("management")
