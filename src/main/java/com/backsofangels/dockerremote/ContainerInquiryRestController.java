@@ -19,11 +19,11 @@ public class ContainerInquiryRestController {
 
     @GetMapping(value = "running")
     public List<Container> getRunningContainers() throws URISyntaxException, IOException {
-        return containersInfoService.getRunningContainers(false);
+        return containersInfoService.getRunningContainers();
     }
 
     @GetMapping(value = "all")
     public List<Container> getAllContainers() throws URISyntaxException, IOException {
-        return containersInfoService.getRunningContainers(true);
+        return containersInfoService.getAllContainers();
     }
 }
