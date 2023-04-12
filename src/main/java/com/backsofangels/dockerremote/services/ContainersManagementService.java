@@ -20,9 +20,13 @@ public class ContainersManagementService {
     public Logger logger = LoggerFactory.getLogger(ContainersManagementService.class);
     private CloseableHttpClient client = NetworkClient.getNetworkClient().getClient();
 
-    public int startContainer(String containerId) throws URISyntaxException, IOException {
+    public int startContainer(String containerId) {
         logger.info("About to start container with id %s", containerId);
-        if (!containerId.isBlank() || !containerId.isEmpty()) {
+        if (containerId.isBlank() || containerId.isEmpty()) {
+            return 500;
+        }
+
+        try {
             URI uri = new URIBuilder()
                     .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
                     .setHost(LocalhostConfiguration.LOCALHOST_HOST)
@@ -36,22 +40,28 @@ public class ContainersManagementService {
             try {
                 logger.debug("Container with id %s started", containerId);
                 return response.getStatusLine().getStatusCode();
-            } catch (Exception e) {
-                logger.error("Error starting container with id %s", containerId);
-                e.printStackTrace();
-                return 500;
             } finally {
                 response.close();
             }
-        } else {
-            logger.error("Empty containerId");
+        } catch (URISyntaxException exception) {
+            logger.error("Error in creating URI");
+            exception.printStackTrace();
+            return 500;
+        } catch (IOException ioException) {
+            logger.error("Error in response unmarshalling");
+            ioException.printStackTrace();
             return 500;
         }
     }
 
-    public int stopContainer(String containerId) throws URISyntaxException, IOException {
+    public int stopContainer(String containerId) {
         logger.info("About to stop container with id %s", containerId);
-        if (!containerId.isEmpty() || !containerId.isBlank()) {
+
+        if (containerId.isEmpty() || containerId.isBlank()) {
+            return 500;
+        }
+
+        try {
             URI uri = new URIBuilder()
                     .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
                     .setHost(LocalhostConfiguration.LOCALHOST_HOST)
@@ -69,14 +79,23 @@ public class ContainersManagementService {
                 response.close();
             }
 
-        } else {
-            logger.error("Empty containerId");
+        } catch (URISyntaxException exception) {
+            logger.error("Error in creating URI");
+            exception.printStackTrace();
+            return 500;
+        } catch (IOException ioException) {
+            logger.error("Error in response unmarshalling");
+            ioException.printStackTrace();
             return 500;
         }
     }
 
-    public int restartContainer(String containerId) throws URISyntaxException, IOException {
-        if (!containerId.isEmpty() || !containerId.isBlank()) {
+    public int restartContainer(String containerId) {
+        if (containerId.isEmpty() || containerId.isBlank()) {
+            return 500;
+        }
+
+        try {
             URI uri = new URIBuilder()
                     .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
                     .setHost(LocalhostConfiguration.LOCALHOST_HOST)
@@ -92,15 +111,23 @@ public class ContainersManagementService {
             } finally {
                 response.close();
             }
-
-        } else {
-            logger.error("Empty containerId");
+        } catch (URISyntaxException exception) {
+            logger.error("Error in creating URI");
+            exception.printStackTrace();
+            return 500;
+        } catch (IOException ioException) {
+            logger.error("Error in response unmarshalling");
+            ioException.printStackTrace();
             return 500;
         }
     }
 
-    public int killContainer(String containerId) throws IOException, URISyntaxException {
-        if (!containerId.isEmpty() || !containerId.isBlank()) {
+    public int killContainer(String containerId) {
+        if (containerId.isEmpty() || containerId.isBlank()) {
+            return 500;
+        }
+
+        try {
             URI uri = new URIBuilder()
                     .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
                     .setHost(LocalhostConfiguration.LOCALHOST_HOST)
@@ -116,9 +143,13 @@ public class ContainersManagementService {
             } finally {
                 response.close();
             }
-
-        } else {
-            logger.error("Empty containerId");
+        } catch (URISyntaxException exception) {
+            logger.error("Error in creating URI");
+            exception.printStackTrace();
+            return 500;
+        } catch (IOException ioException) {
+            logger.error("Error in response unmarshalling");
+            ioException.printStackTrace();
             return 500;
         }
     }
