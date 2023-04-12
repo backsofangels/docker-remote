@@ -26,82 +26,86 @@ public class ContainersInfoService {
     private Logger logger = LoggerFactory.getLogger(ContainersInfoService.class);
     private CloseableHttpClient client = NetworkClient.getNetworkClient().getClient();
 
-    public List<Container> getRunningContainers() throws IOException {
-        URI uri;
-
+    public List<Container> getRunningContainers() {
         try {
-            uri = new URIBuilder()
+            URI uri = new URIBuilder()
                     .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
                     .setHost(LocalhostConfiguration.LOCALHOST_HOST)
                     .setPort(LocalhostConfiguration.LOCALHOST_PORT)
                     .setPath(Endpoints.CONTAINER_LIST)
                     .build();
+
+
+            CloseableHttpResponse response = null;
+            HttpGet get = new HttpGet(uri);
+            get.addHeader("Accept", "application/json");
+
+            try {
+                response = client.execute(get);
+
+                HttpEntity entity = response.getEntity();
+                ObjectMapper mapper = new ObjectMapper();
+
+                return mapper
+                        .readValue(entity.getContent(), mapper
+                                .getTypeFactory()
+                                .constructCollectionType(ArrayList.class, Container.class));
+            } catch (IOException exception) {
+                exception.printStackTrace();
+                return null;
+            } finally {
+                if (response != null) {
+                    response.close();
+                }
+            }
         } catch (URISyntaxException exception) {
-            return null;
-        }
-
-        HttpGet get = new HttpGet(uri);
-        get.addHeader("Accept", "application/json");
-
-
-        CloseableHttpResponse response = null;
-
-        try {
-            response = null;
-            response = client.execute(get);
-
-            HttpEntity entity = response.getEntity();
-            ObjectMapper mapper = new ObjectMapper();
-
-            return mapper
-                    .readValue(entity.getContent(), mapper
-                            .getTypeFactory()
-                            .constructCollectionType(ArrayList.class, Container.class));
-        } catch (IOException exception) {
             exception.printStackTrace();
             return null;
-        } finally {
-            response.close();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            return null;
         }
     }
 
-    public List<Container> getAllContainers() throws IOException {
-        URI uri;
-
+    public List<Container> getAllContainers() {
         try {
-            uri = new URIBuilder()
+            URI uri = new URIBuilder()
                     .setScheme(LocalhostConfiguration.LOCALHOST_SCHEME)
                     .setHost(LocalhostConfiguration.LOCALHOST_HOST)
                     .setPort(LocalhostConfiguration.LOCALHOST_PORT)
                     .setPath(Endpoints.CONTAINER_LIST)
                     .addParameter("all", "true")
                     .build();
+
+
+            CloseableHttpResponse response = null;
+            HttpGet get = new HttpGet(uri);
+            get.addHeader("Accept", "application/json");
+
+            try {
+                response = client.execute(get);
+
+                HttpEntity entity = response.getEntity();
+                ObjectMapper mapper = new ObjectMapper();
+
+                return mapper
+                        .readValue(entity.getContent(), mapper
+                                .getTypeFactory()
+                                .constructCollectionType(ArrayList.class, Container.class));
+            } catch (IOException exception) {
+                exception.printStackTrace();
+                return null;
+            } finally {
+                if (response != null) {
+                    response.close();
+                }
+            }
         } catch (URISyntaxException exception) {
-            return null;
-        }
-
-        HttpGet get = new HttpGet(uri);
-        get.addHeader("Accept", "application/json");
-
-
-        CloseableHttpResponse response = null;
-
-        try {
-            response = null;
-            response = client.execute(get);
-
-            HttpEntity entity = response.getEntity();
-            ObjectMapper mapper = new ObjectMapper();
-
-            return mapper
-                    .readValue(entity.getContent(), mapper
-                            .getTypeFactory()
-                            .constructCollectionType(ArrayList.class, Container.class));
-        } catch (IOException exception) {
             exception.printStackTrace();
             return null;
-        } finally {
-            response.close();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+            return null;
         }
     }
 }
