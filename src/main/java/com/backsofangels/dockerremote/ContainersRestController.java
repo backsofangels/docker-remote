@@ -58,7 +58,7 @@ public class ContainersRestController {
         return new ResponseEntity<>(HttpStatusCode.valueOf(containersManagementService.killContainer(containerId)));
     }
 
-    @RequestMapping(value = "/healthcheck", method = )
+    @GetMapping(value = "/healthcheck")
     public ResponseEntity<?> healthcheck() {
         return ResponseEntity.status(containersInfoService.healthcheck()).build();
     }
