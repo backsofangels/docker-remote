@@ -138,6 +138,7 @@ public class ContainersInfoService {
                 return response.getStatusLine().getStatusCode();
             } catch (IOException e) {
                 e.printStackTrace();
+                return 500;
             } finally {
                 if (response != null) {
                     response.close();
@@ -145,8 +146,10 @@ public class ContainersInfoService {
             }
         } catch (URISyntaxException exception) {
             exception.printStackTrace();
+            return 500;
         } catch (IOException exception) {
             exception.printStackTrace();
+            return 500;
         }
     }
 }
