@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ContainerInquiryRestControllerTests {
+public class ContainersRestControllerTests {
 
     @Value(value="${local.server.port}")
     private int port;
