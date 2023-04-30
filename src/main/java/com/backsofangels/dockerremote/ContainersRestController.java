@@ -1,19 +1,42 @@
 package com.backsofangels.dockerremote;
 
+import com.backsofangels.dockerremote.services.ContainersInfoService;
+import com.backsofangels.dockerremote.model.Container;
 import com.backsofangels.dockerremote.services.ContainersManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("management")
-public class ContainerManagementRestController {
+@RequestMapping("containers")
+public class ContainersRestController {
+    @Autowired
+    private ContainersInfoService containersInfoService;
+
     @Autowired
     private ContainersManagementService containersManagementService;
+
+    @GetMapping(value = "running")
+    public ResponseEntity<List<Container>> getRunningContainers() {
+        List<Container> response = containersInfoService.getRunningContainers();
+
+        if (response != null) {
+            return ResponseEntity.ok(response);
+        } else return ResponseEntity.internalServerError().body(null);
+    }
+
+    @GetMapping(value = "all")
+    public ResponseEntity<List<Container>> getAllContainers() {
+        List<Container> response = containersInfoService.getAllContainers();
+
+        if (response != null) {
+            return ResponseEntity.ok(response);
+        } else return ResponseEntity.internalServerError().body(null);
+    }
 
     @PostMapping(value = "/start/{containerId}")
     public ResponseEntity<String> startContainer(@PathVariable String containerId) {
@@ -33,5 +56,10 @@ public class ContainerManagementRestController {
     @PostMapping(value = "/kill/{containerId}")
     public ResponseEntity<String> killContainer(@PathVariable String containerId) {
         return new ResponseEntity<>(HttpStatusCode.valueOf(containersManagementService.killContainer(containerId)));
+    }
+
+    @RequestMapping(value = "/healthcheck", method = )
+    public ResponseEntity<?> healthcheck() {
+        return ResponseEntity.status(containersInfoService.healthcheck()).build();
     }
 }
