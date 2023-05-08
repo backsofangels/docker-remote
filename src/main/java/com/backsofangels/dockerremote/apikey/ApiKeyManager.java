@@ -1,7 +1,9 @@
 package com.backsofangels.dockerremote.apikey;
 
+import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -10,13 +12,18 @@ import java.util.Random;
 @Service
 public class ApiKeyManager {
     private static ApiKeyManager managerInstance = null;
+
+    @Autowired
+    @Required
     private SecretFileManager secretFileManager;
+
     private String apiKey;
 
     private Logger logger = LoggerFactory.getLogger("ApiKeyManager");
 
     private ApiKeyManager() {
         apiKey = this.generateApiKey();
+
     }
 
     public static ApiKeyManager getManagerInstance() {
@@ -46,8 +53,6 @@ public class ApiKeyManager {
     }
 
     public boolean persistApiKey() {
-        secretFileManager = new SecretFileManager();
-
         if (!secretFileManager.checkIfApiKeyExists()) {
             secretFileManager.createApiKeyFile();
         }

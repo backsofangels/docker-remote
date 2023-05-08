@@ -2,12 +2,14 @@ package com.backsofangels.dockerremote.apikey;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Service
 public class SecretFileManager {
     private final String FILE_NAME = "src/main/resources/apikey";
     private Logger logger = LoggerFactory.getLogger("SecretFileManager");
