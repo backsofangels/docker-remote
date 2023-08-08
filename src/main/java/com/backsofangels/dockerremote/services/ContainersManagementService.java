@@ -21,10 +21,16 @@ public class ContainersManagementService {
     private CloseableHttpClient client = NetworkClient.getNetworkClient().getClient();
 
     public int startContainer(String containerId) {
-        logger.info("About to start container with id %s", containerId);
+        //Add non-null check
+        if (containerId == null) {
+            return 500;
+        }
+
         if (containerId.isBlank() || containerId.isEmpty()) {
             return 500;
         }
+
+        logger.info("About to start container with id %s", containerId);
 
         try {
             URI uri = new URIBuilder()
@@ -55,6 +61,11 @@ public class ContainersManagementService {
     }
 
     public int stopContainer(String containerId) {
+        //Add non-null check
+        if (containerId == null) {
+            return 500;
+        }
+
         logger.info("About to stop container with id %s", containerId);
 
         if (containerId.isEmpty() || containerId.isBlank()) {
@@ -91,6 +102,11 @@ public class ContainersManagementService {
     }
 
     public int restartContainer(String containerId) {
+        //Add non-null check
+        if (containerId == null) {
+            return 500;
+        }
+
         if (containerId.isEmpty() || containerId.isBlank()) {
             return 500;
         }
@@ -123,6 +139,11 @@ public class ContainersManagementService {
     }
 
     public int killContainer(String containerId) {
+        //Add non-null check
+        if (containerId == null) {
+            return 500;
+        }
+
         if (containerId.isEmpty() || containerId.isBlank()) {
             return 500;
         }
